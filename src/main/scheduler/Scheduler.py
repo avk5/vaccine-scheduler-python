@@ -152,11 +152,11 @@ def upload_availability(tokens):
         return
 
     date = tokens[1]
-    # assume input is hyphenated in the format mm-dd-yyyy
+    # assume input is hyphenated in the format yyyy-mm-dd
     date_tokens = date.split("-")
-    month = int(date_tokens[0])
-    day = int(date_tokens[1])
-    year = int(date_tokens[2])
+    year = int(date_tokens[0])
+    month = int(date_tokens[1])
+    day = int(date_tokens[2])
     try:
         d = datetime.datetime(year, month, day)
         current_caregiver.upload_availability(d)
@@ -253,8 +253,7 @@ def logout(tokens):
 
 def start():
     stop = False
-    print()
-    print(" *** Please enter one of the following commands *** ")
+    print("*** Please enter one of the following commands ***")
     print("> create_patient <username> <password>")  # //TODO: implement create_patient (Part 1)
     print("> create_caregiver <username> <password>")
     print("> login_patient <username> <password>")  # // TODO: implement login_patient (Part 1)
@@ -266,7 +265,7 @@ def start():
     print("> add_doses <vaccine> <number>")
     print("> show_appointments")  # // TODO: implement show_appointments (Part 2)
     print("> logout")  # // TODO: implement logout (Part 2)
-    print("> Quit")
+    print("> quit")
     print()
     while not stop:
         response = ""
