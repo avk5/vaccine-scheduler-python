@@ -53,7 +53,7 @@ def create_caregiver(tokens):
     except Exception as e:
         print("Failed to create user.")
         return
-    print("Created user ", username)
+    print("Created user", username)
 
 
 def username_exists_caregiver(username):
@@ -70,11 +70,13 @@ def username_exists_caregiver(username):
             return row['Username'] is not None
     except sqlite3.Error as e:
         print("Error occurred when checking username")
+        cm.close_connection()
         return True
     except Exception as e:
         print("Error occurred when checking username")
-    finally:
         cm.close_connection()
+        return True
+    cm.close_connection()
     return False
 
 
