@@ -20,6 +20,7 @@ class Vaccine:
             cursor.execute(get_vaccine, (self.vaccine_name,))
             for row in cursor:
                 self.available_doses = row[1]
+                cm.close_connection()
                 return self
         except sqlite3.Error:
             # print("Error occurred when getting Vaccine")

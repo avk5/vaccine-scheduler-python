@@ -49,11 +49,9 @@ def create_caregiver(tokens):
         caregiver.save_to_db()
     except sqlite3.Error as e:
         print("Failed to create user.")
-        print("Db-Error:", e)
-        quit()
+        return
     except Exception as e:
         print("Failed to create user.")
-        print(e)
         return
     print("Created user ", username)
 
@@ -68,14 +66,13 @@ def username_exists_caregiver(username):
         cursor.execute(select_username, (username,))
         #  returns false if the cursor is not before the first record or if there are no rows in the ResultSet.
         for row in cursor:
+            cm.close_connection()
             return row['Username'] is not None
     except sqlite3.Error as e:
         print("Error occurred when checking username")
-        print("Db-Error:", e)
-        quit()
+        return True
     except Exception as e:
         print("Error occurred when checking username")
-        print("Error:", e)
     finally:
         cm.close_connection()
     return False
@@ -109,11 +106,9 @@ def login_caregiver(tokens):
         caregiver = Caregiver(username, password=password).get()
     except sqlite3.Error as e:
         print("Login failed.")
-        print("Db-Error:", e)
-        quit()
+        return
     except Exception as e:
         print("Login failed.")
-        print("Error:", e)
         return
 
     # check if the login was successful
@@ -162,14 +157,12 @@ def upload_availability(tokens):
         current_caregiver.upload_availability(d)
     except sqlite3.Error as e:
         print("Upload Availability Failed")
-        print("Db-Error:", e)
-        quit()
+        return
     except ValueError:
         print("Please enter a valid date!")
         return
     except Exception as e:
         print("Error occurred when uploading availability")
-        print("Error:", e)
         return
     print("Availability uploaded!")
 
@@ -201,11 +194,9 @@ def add_doses(tokens):
         vaccine = Vaccine(vaccine_name, doses).get()
     except sqlite3.Error as e:
         print("Error occurred when adding doses")
-        print("Db-Error:", e)
-        quit()
+        return
     except Exception as e:
         print("Error occurred when adding doses")
-        print("Error:", e)
         return
 
     # if the vaccine is not found in the database, add a new (vaccine, doses) entry.
@@ -216,11 +207,9 @@ def add_doses(tokens):
             vaccine.save_to_db()
         except sqlite3.Error as e:
             print("Error occurred when adding doses")
-            print("Db-Error:", e)
-            quit()
+            return
         except Exception as e:
             print("Error occurred when adding doses")
-            print("Error:", e)
             return
     else:
         # if the vaccine is not null, meaning that the vaccine already exists in our table
@@ -228,11 +217,9 @@ def add_doses(tokens):
             vaccine.increase_available_doses(doses)
         except sqlite3.Error as e:
             print("Error occurred when adding doses")
-            print("Db-Error:", e)
-            quit()
+            return
         except Exception as e:
             print("Error occurred when adding doses")
-            print("Error:", e)
             return
     print("Doses updated!")
 
